@@ -1,0 +1,6 @@
+include(CMakeFindDependencyMacro)
+
+include("@CMAKE_INSTALL_PREFIX@/CEDDLTargets.cmake")
+
+SET(CEDDL_LIBRARIES ceddl)
+SET(CEDDL_INCLUDE_DIR "@CMAKE_INSTALL_PREFIX@/include")
