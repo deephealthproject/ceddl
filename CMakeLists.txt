@@ -45,6 +45,7 @@ include_directories(src)
 SET(SOURCE_DIR "src")
 SET(CPP_SOURCES
         src/ceddl.c
+        src/ceddl.h
         )
 SET(SOURCES ${CPP_SOURCES}})
 

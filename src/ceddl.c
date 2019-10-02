@@ -5,7 +5,6 @@
 //
 // Main authors and developers:
 //      Ynse Hoornenborg: ynse.hoornenborg@philips.com
-//      Roberto Paredes: rparedes@prhlt.upv.es
 //
 //
 // To collaborate please contact ynse.hoornenborg@philips.com
@@ -19,8 +18,9 @@
 #define CEDDLL_API
 #endif
 
+#include <ceddl.h>
+
 using namespace eddll;
 
 extern "C" {
-
 }
