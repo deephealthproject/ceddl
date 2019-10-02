@@ -18,155 +18,155 @@
 #define CEDDLL_API
 #endif
 
-using namespace eddll;
+#define CALLING_CONV
 
 extern "C" {
 
-    typedef void* tensor;
-    typedef void* layer;
-    typedef void* model;
-    typedef void* optimizer;
-    typedef void* callback;
-    typedef void* initializer;
-    typedef void* loss;
-    typedef void* metric;
-    typedef void* compserv;
+    typedef void* tensor_ptr;
+    typedef void* layer_ptr;
+    typedef void* model_ptr;
+    typedef void* optimizer_ptr;
+    typedef void* callback_ptr;
+    typedef void* initializer_ptr;
+    typedef void* loss_ptr;
+    typedef void* metric_ptr;
+    typedef void* compserv_ptr;
 
     // ---- TENSOR ----
-    tensor ceddl_tensor(const int* shape, int shape_count, float *ptr);
+	CEDDLL_API tensor_ptr CALLING_CONV ceddl_tensor(const int* shape, int shape_count, float *ptr);
 
-    tensor ceddl_tensor_load(const char* fname);
+	CEDDLL_API tensor_ptr CALLING_CONV ceddl_tensor_load(const char* fname);
 
-    float *ceddl_tensor_getptr(tensor t);
+	CEDDLL_API float* CALLING_CONV ceddl_tensor_getptr(tensor_ptr t);
 
     // ---- TENSOR OPERATIONS ----
-    void ceddl_div(tensor t, float v);
+	CEDDLL_API void CALLING_CONV ceddl_div(tensor_ptr t, float v);
 
     // ---- CORE LAYERS ----
-    layer ceddl_Activation(layer parent, char* activation, char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(layer_ptr parent, char* activation, char* name);
 
-    layer ceddl_Conv(layer parent, int filters, const int* kernel_size, int kernel_size_count,
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Conv(layer_ptr parent, int filters, const int* kernel_size, int kernel_size_count,
             const int* strides, int strides_count, const char* padding, int groups,
             const int* dilation_rate, int dilation_rate_count,
             bool use_bias, const char* name);
-    layer ceddl_ConvT(layer parent, int filters, const int* kernel_size, int kernel_size_count,
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_ConvT(layer_ptr parent, int filters, const int* kernel_size, int kernel_size_count,
             const int* output_padding, int output_padding_count, const char* padding,
             const int* dilation_rate, int dilation_rate_count,
             const int* strides, int strides_count,
             bool use_bias, const char* name);
-    layer ceddl_Dense(layer parent, int ndim, bool use_bias, const char* name);
-    layer ceddl_Embedding(int input_dim, int output_dim, const char* name);
-    layer ceddl_Input(const int* shape, int shape_count, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Dense(layer_ptr parent, int num_dim, bool use_bias, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Embedding(int input_dim, int output_dim, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Input(const int* shape, int shape_count, const char* name);
 
-    layer ceddl_UpSampling(layer parent, const int* size, int size_count, const char* interpolation,
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_UpSampling(layer_ptr parent, const int* size, int size_count, const char* interpolation,
             const char* name);
-    layer ceddl_Reshape(layer parent, const int* shape, int shape_count, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Reshape(layer_ptr parent, const int* shape, int shape_count, const char* name);
 
-    layer ceddl_Transpose(layer parent, const int* dims, int dims_count, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Transpose(layer_ptr parent, const int* dims, int dims_count, const char* name);
 
     // ---- LOSSES ----
-    loss ceddl_getLoss(const char* type);
+	CEDDLL_API loss_ptr CALLING_CONV ceddl_getLoss(const char* type);
 
     // ---- METRICS ----
-    metric ceddl_getMetric(const char* type);
+	CEDDLL_API metric_ptr CALLING_CONV ceddl_getMetric(const char* type);
 
     // ---- MERGE LAYERS ----
-    layer ceddl_Add(const layer* layers, int layers_count, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Add(const layer_ptr* layers, int layers_count, const char* name);
 
-    layer ceddl_Average(const layer* layers, int layers_count, const char* name);
-    layer ceddl_Concat(const layer* layers, int layers_count, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Average(const layer_ptr* layers, int layers_count, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Concat(const layer_ptr* layers, int layers_count, const char* name);
 
-    layer ceddl_MatMul(const layer* layers, int layers_count, const char* name);
-    layer ceddl_Maximum(const layer* layers, int layers_count, const char* name);
-    layer ceddl_Minimum(const layer* layers, int layers_count, const char* name);
-    layer ceddl_Subtract(const layer* layers, int layers_count, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_MatMul(const layer_ptr* layers, int layers_count, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Maximum(const layer_ptr* layers, int layers_count, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Minimum(const layer_ptr* layers, int layers_count, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Subtract(const layer_ptr* layers, int layers_count, const char* name);
 
     // ---- NOISE LAYERS ----
-    layer ceddl_GaussianNoise(layer parent, float stddev, const char* name = ""); //Todo: Implement
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_GaussianNoise(layer_ptr parent, float std_dev, const char* name);
 
     // ---- NORMALIZATION LAYERS ----
-    layer ceddl_BatchNormalization(layer parent, float momentum, float epsilon, bool affine, const char* name);
-    layer ceddl_Dropout(layer parent, float rate, const char* name = "");
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_BatchNormalization(layer_ptr parent, float momentum, float epsilon, bool affine, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Dropout(layer_ptr parent, float rate, const char* name);
 
     // ---- OPERATOR LAYERS ----
-    layer ceddl_Abs(layer l);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Abs(layer_ptr l);
 
-    layer ceddl_Diff(layer l1, layer l2);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Diff(layer_ptr l1, layer_ptr l2);
 
-    layer ceddl_Diff_scalar(layer l1, float k);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Diff_scalar(layer_ptr l1, float k);
 
-    layer ceddl_Div(layer l1, layer l2);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Div(layer_ptr l1, layer_ptr l2);
 
-    layer ceddl_Div_scalar(layer l1, float k);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Div_scalar(layer_ptr l1, float k);
 
-    layer ceddl_Exp(layer l);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Exp(layer_ptr l);
 
-    layer ceddl_Log(layer l);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Log(layer_ptr l);
 
-    layer ceddl_Log2(layer l);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Log2(layer_ptr l);
 
-    layer ceddl_Log10(layer l);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Log10(layer_ptr l);
 
-    layer ceddl_Mult(layer l1, layer l2);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Mult(layer_ptr l1, layer_ptr l2);
 
-    layer ceddl_Mult_scalar(layer l1, float k);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Mult_scalar(layer_ptr l1, float k);
 
-    layer ceddl_Pow(layer l1, layer l2);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Pow(layer_ptr l1, layer_ptr l2);
 
-    layer ceddl_Pow_scalar(layer l1, float k);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Pow_scalar(layer_ptr l1, float k);
 
-    layer ceddl_Sqrt(layer l);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Sqrt(layer_ptr l);
 
-    layer ceddl_Sum(layer l1, layer l2);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Sum(layer_ptr l1, layer_ptr l2);
 
-    layer ceddl_Sum_scalar(layer l1, float k);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Sum_scalar(layer_ptr l1, float k);
 
     // ---- REDUCTION LAYERS ----
-    layer ceddl_ReduceMean(layer l, const int* axis, int axis_count, bool keepdims = false);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_ReduceMean(layer_ptr l, const int* axis, int axis_count, bool keep_dims);
 
-    layer ceddl_ReduceVar(layer l, const int* axis, int axis_count, bool keepdims = false);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_ReduceVar(layer_ptr l, const int* axis, int axis_count, bool keep_dims);
 
-    layer ceddl_ReduceSum(layer l, const int* axis, int axis_count, bool keepdims = false);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_ReduceSum(layer_ptr l, const int* axis, int axis_count, bool keep_dims);
 
-    layer ceddl_ReduceMax(layer l, const int* axis, int axis_count, bool keepdims = false);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_ReduceMax(layer_ptr l, const int* axis, int axis_count, bool keep_dims);
 
-    layer ceddl_ReduceMin(layer l, const int* axis, int axis_count, bool keepdims = false);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_ReduceMin(layer_ptr l, const int* axis, int axis_count, bool keep_dims);
 
     // ---- GENERATOR LAYERS ----
-    layer ceddl_GaussGenerator(float mean, float stdev, const int* size, int size_count);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_GaussGenerator(float mean, float std_dev, const int* size, int size_count);
 
-    layer ceddl_UniformGenerator(float low, float high, const int* size, int size_count);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_UniformGenerator(float low, float high, const int* size, int size_count);
 
     // ---- OPTIMIZERS ----
-    optimizer ceddl_adadelta(float lr, float rho, float epsilon, float weight_decay);
-    optimizer ceddl_adam(float lr, float beta_1, float beta_2, float epsilon, float weight_decay,
+	CEDDLL_API optimizer_ptr CALLING_CONV ceddl_adadelta(float lr, float rho, float epsilon, float weight_decay);
+	CEDDLL_API optimizer_ptr CALLING_CONV ceddl_adam(float lr, float beta_1, float beta_2, float epsilon, float weight_decay,
         bool amsgrad);
-    optimizer ceddl_adagrad(float lr, float epsilon, float weight_decay);
-    optimizer ceddl_adamax(float lr, float beta_1, float beta_2, float epsilon, float weight_decay);
-    optimizer ceddl_nadam(float lr, float beta_1, float beta_2, float epsilon, float schedule_decay);
-    optimizer ceddl_rmsprop(float lr, float rho, float epsilon, float weight_decay);
-    optimizer ceddl_sgd(float lr, float momentum, float weight_decay, bool nesterov);
+	CEDDLL_API optimizer_ptr CALLING_CONV ceddl_adagrad(float lr, float epsilon, float weight_decay);
+	CEDDLL_API optimizer_ptr CALLING_CONV ceddl_adamax(float lr, float beta_1, float beta_2, float epsilon, float weight_decay);
+	CEDDLL_API optimizer_ptr CALLING_CONV ceddl_nadam(float lr, float beta_1, float beta_2, float epsilon, float schedule_decay);
+	CEDDLL_API optimizer_ptr CALLING_CONV ceddl_rmsprop(float lr, float rho, float epsilon, float weight_decay);
+	CEDDLL_API optimizer_ptr CALLING_CONV ceddl_sgd(float lr, float momentum, float weight_decay, bool nesterov);
 
 
     // ---- POOLING LAYERS ----
-    layer ceddl_AveragePool(layer parent,
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_AveragePool(layer_ptr parent,
         const int* pool_size, int pool_size_count,
         const int* strides, int strides_count,
         const char* padding, const char* name);
 
-    layer ceddl_GlobalMaxPool(layer parent, const char* name);
-    layer ceddl_GlobalAveragePool(layer parent, const char* name);
-    layer ceddl_MaxPool(layer parent,
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_GlobalMaxPool(layer_ptr parent, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_GlobalAveragePool(layer_ptr parent, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_MaxPool(layer_ptr parent,
         const int* pool_size, int pool_size_count,
         const int* strides, int strides_count,
         const char* padding, const char* name);
 
 
     // ---- RECURRENT LAYERS ----
-    layer ceddl_RNN(layer parent, int units, int num_layers, bool use_bias, float dropout,
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_RNN(layer_ptr parent, int units, int num_layers, bool use_bias, float dropout,
         bool bidirectional, const char* name);
 
-    layer ceddl_LSTM(layer parent, int units, int num_layers, bool use_bias, float dropout,
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_LSTM(layer_ptr parent, int units, int num_layers, bool use_bias, float dropout,
         bool bidirectional, const char* name);
 
 
@@ -178,61 +178,61 @@ extern "C" {
     //    callback StepLR(int step_size, float gamma, int last_epoch); //Todo: Implement
 
     // ---- INITIALIZERS ----
-    initializer ceddl_Constant(float value);
-    initializer ceddl_Identity(float gain);
-    initializer ceddl_GlorotNormal(float seed);
-    initializer ceddl_GlorotUniform(float seed);
-    initializer ceddl_RandomNormal(float mean, float stdev, int seed);
-    initializer ceddl_RandomUniform(float minval, float maxval, int seed);
-    initializer ceddl_Orthogonal(float gain, int seed);
+	CEDDLL_API initializer_ptr CALLING_CONV ceddl_Constant(float value);
+	CEDDLL_API initializer_ptr CALLING_CONV ceddl_Identity(float gain);
+	CEDDLL_API initializer_ptr CALLING_CONV ceddl_GlorotNormal(float seed);
+	CEDDLL_API initializer_ptr CALLING_CONV ceddl_GlorotUniform(float seed);
+	CEDDLL_API initializer_ptr CALLING_CONV ceddl_RandomNormal(float mean, float std_dev, int seed);
+	CEDDLL_API initializer_ptr CALLING_CONV ceddl_RandomUniform(float min_val, float max_val, int seed);
+	CEDDLL_API initializer_ptr CALLING_CONV ceddl_Orthogonal(float gain, int seed);
 
 
     // ---- COMPUTING SERVICES ----
-    compserv ceddl_CS_CPU(int th, int lsb);
+	CEDDLL_API compserv_ptr CALLING_CONV ceddl_CS_CPU(int th, int lsb);
 
-    compserv ceddl_CS_GPU(const int* g, int g_count, int lsb);
+	CEDDLL_API compserv_ptr CALLING_CONV ceddl_CS_GPU(const int* g, int g_count, int lsb);
 
-    compserv ceddl_CS_FGPA(const int* f, int f_count, int lsb);
+	CEDDLL_API compserv_ptr CALLING_CONV ceddl_CS_FGPA(const int* f, int f_count, int lsb);
 
-    compserv ceddl_CS_COMPSS(char* path);
+	CEDDLL_API compserv_ptr CALLING_CONV ceddl_CS_COMPSS(char* path);
 
 
     // ---- MODEL METHODS ----
-    model ceddl_Model(layer in, layer out);
+	CEDDLL_API model_ptr CALLING_CONV ceddl_Model(layer_ptr* in, int in_count, layer_ptr* out, int out_count);
 
-    void ceddl_build(model net, optimizer o, const char** lo, int lo_count, const char** me, int me_count, compserv cs);
+	CEDDLL_API void CALLING_CONV ceddl_build(model_ptr net, optimizer_ptr o, const char** lo, int lo_count, const char** me, int me_count, compserv_ptr cs);
 
-    const char* ceddl_summary(model m);
+	CEDDLL_API const char* CALLING_CONV ceddl_summary(model_ptr m);
 
-    void ceddl_load(model m, const char* fname);
+	CEDDLL_API void CALLING_CONV ceddl_load(model_ptr m, const char* fname);
 
-    void ceddl_save(model m, const char* fname);
+	CEDDLL_API void CALLING_CONV ceddl_save(model_ptr m, const char* fname);
 
-    void ceddl_plot(model m, const char* fname);
+	CEDDLL_API void CALLING_CONV ceddl_plot(model_ptr m, const char* fname);
 
-    void ceddl_fit(model m, const tensor* in, int in_count, const tensor* out, int out_count, int batch, int epochs);
+	CEDDLL_API void CALLING_CONV ceddl_fit(model_ptr m, const tensor_ptr* in, int in_count, const tensor_ptr* out, int out_count, int batch, int epochs);
 
-    void ceddl_evaluate(model m, const tensor* in, int in_count, const tensor* out, int out_count);
+	CEDDLL_API void CALLING_CONV ceddl_evaluate(model_ptr m, const tensor_ptr* in, int in_count, const tensor_ptr* out, int out_count);
 
-    void ceddl_predict(model m, const tensor* in, int in_count, const tensor* out, int out_count);
+	CEDDLL_API void CALLING_CONV ceddl_predict(model_ptr m, const tensor_ptr* in, int in_count, const tensor_ptr* out, int out_count);
 
-    model ceddl_load_model(const char* fname);
-    void ceddl_save_model(model m, const char* fname);
-    void ceddl_set_trainable(model m);
-    model ceddl_zoo_models(const char* model_name);
-    bool ceddl_exist(const char* name);
+	CEDDLL_API model_ptr CALLING_CONV ceddl_load_model(const char* fname);
+	CEDDLL_API void CALLING_CONV ceddl_save_model(model_ptr m, const char* fname);
+	CEDDLL_API void CALLING_CONV ceddl_set_trainable(model_ptr m);
+	CEDDLL_API model_ptr CALLING_CONV ceddl_zoo_models(const char* model_name);
+	CEDDLL_API bool CALLING_CONV ceddl_exist(const char* name);
 
     // ---- LAYER METHODS ----
-    void ceddl_set_trainable(layer l);
-    layer ceddl_get_layer(model m, const char* layer_name);
+	CEDDLL_API void CALLING_CONV ceddl_set_trainable_layer(layer_ptr l);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_get_layer(model_ptr m, const char* layer_name);
 
 
-    // ---- DATASETS ----
-    void ceddl_download_mnist();
+    // ---- DATA SETS ----
+	CEDDLL_API void CALLING_CONV ceddl_download_mnist();
 
     // ---- MODELS FOR TESTING ----
-    model ceddl_get_model_mlp(int batch_size);
+	CEDDLL_API model_ptr CALLING_CONV ceddl_get_model_mlp(int batch_size);
 
-    model ceddl_get_model_cnn(int batch_size);
+	CEDDLL_API model_ptr CALLING_CONV ceddl_get_model_cnn(int batch_size);
 
 }
