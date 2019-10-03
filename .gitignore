@@ -54,6 +54,7 @@ dkms.conf
 # Visual studio project files
 *.vcxproj
 *.vcxproj.filters
+*.vcxproj.user
 *.sln
 *.sln.DotSettings.user
 *.suo
