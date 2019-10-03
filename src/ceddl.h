@@ -171,11 +171,11 @@ extern "C" {
 
 
     //    // ---- LR SCHEDULERS ----
-    //    callback CosineAnnealingLR(int T_max, float eta_min, int last_epoch); //Todo: Implement
-    //    callback ExponentialLR(float gamma, int last_epoch); //Todo: Implement
-    //    callback MultiStepLR(const vector<int> &milestones, float gamma, int last_epoch); //Todo: Implement
-    //    callback ReduceLROnPlateau(string metric, string mode, float factor, int patience, float threshold, string threshold_mode, int cooldown, float min_lr, float eps); //Todo: Implement
-    //    callback StepLR(int step_size, float gamma, int last_epoch); //Todo: Implement
+    //    callback CosineAnnealingLR(int T_max, float eta_min, int last_epoch);
+    //    callback ExponentialLR(float gamma, int last_epoch);
+    //    callback MultiStepLR(const vector<int> &milestones, float gamma, int last_epoch);
+    //    callback ReduceLROnPlateau(string metric, string mode, float factor, int patience, float threshold, string threshold_mode, int cooldown, float min_lr, float eps);
+    //    callback StepLR(int step_size, float gamma, int last_epoch);
 
     // ---- INITIALIZERS ----
 	CEDDLL_API initializer_ptr CALLING_CONV ceddl_Constant(float value);
@@ -200,7 +200,10 @@ extern "C" {
     // ---- MODEL METHODS ----
 	CEDDLL_API model_ptr CALLING_CONV ceddl_Model(layer_ptr* in, int in_count, layer_ptr* out, int out_count);
 
-	CEDDLL_API void CALLING_CONV ceddl_build(model_ptr net, optimizer_ptr o, const char** lo, int lo_count, const char** me, int me_count, compserv_ptr cs);
+	CEDDLL_API void CALLING_CONV ceddl_build(model_ptr net, optimizer_ptr o,
+		const char** lo, int lo_count,
+		const char** me, int me_count,
+		compserv_ptr cs);
 
 	CEDDLL_API const char* CALLING_CONV ceddl_summary(model_ptr m);
 
@@ -210,11 +213,18 @@ extern "C" {
 
 	CEDDLL_API void CALLING_CONV ceddl_plot(model_ptr m, const char* fname);
 
-	CEDDLL_API void CALLING_CONV ceddl_fit(model_ptr m, const tensor_ptr* in, int in_count, const tensor_ptr* out, int out_count, int batch, int epochs);
+	CEDDLL_API void CALLING_CONV ceddl_fit(model_ptr m,
+		const tensor_ptr* in, int in_count,
+		const tensor_ptr* out, int out_count,
+		int batch, int epochs);
 
-	CEDDLL_API void CALLING_CONV ceddl_evaluate(model_ptr m, const tensor_ptr* in, int in_count, const tensor_ptr* out, int out_count);
+	CEDDLL_API void CALLING_CONV ceddl_evaluate(model_ptr m,
+		const tensor_ptr* in, int in_count,
+		const tensor_ptr* out, int out_count);
 
-	CEDDLL_API void CALLING_CONV ceddl_predict(model_ptr m, const tensor_ptr* in, int in_count, const tensor_ptr* out, int out_count);
+	CEDDLL_API void CALLING_CONV ceddl_predict(model_ptr m,
+		const tensor_ptr* in, int in_count,
+		const tensor_ptr* out, int out_count);
 
 	CEDDLL_API model_ptr CALLING_CONV ceddl_load_model(const char* fname);
 	CEDDLL_API void CALLING_CONV ceddl_save_model(model_ptr m, const char* fname);
