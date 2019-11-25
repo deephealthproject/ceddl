@@ -31,8 +31,10 @@ tensor transformTensor(tensor_ptr t) {
 
 template <class T, class T_ptr, class Func>
 void fillVector(std::vector<T> &vector, const T_ptr* arr, int arr_count, Func func) {
-	const std::vector<T_ptr> ptr_vector(arr, arr + arr_count);
-	std::transform(ptr_vector.begin(), ptr_vector.end(), vector.begin(), func);
+	std::vector<T_ptr> in_vector(arr, arr + arr_count);
+	for(int i = 0; i < in_vector.size(); i++) {
+		vector.push_back(func(in_vector[i]));
+	}
 }
 
 extern "C" {
@@ -64,6 +66,10 @@ extern "C" {
 		return eddl::Activation(transformLayer(parent), activation_str, param, name_str);
 	}
 
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_ReLu(layer_ptr parent) {
+		return eddl::ReLu(transformLayer(parent));
+	}
+	
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Conv(layer_ptr parent, int filters,
 		const int* kernel_size, int kernel_size_count,
 		const int* strides, int strides_count,

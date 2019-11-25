@@ -30,7 +30,6 @@ extern "C" {
     typedef void* loss_ptr;
     typedef void* metric_ptr;
     typedef void* compserv_ptr;
-	typedef void* regularizer_ptr;
 
     // ---- TENSOR ----
 	CEDDLL_API tensor_ptr CALLING_CONV ceddl_tensor(const int* shape, int shape_count, float *ptr);
@@ -44,7 +43,8 @@ extern "C" {
 
     // ---- CORE LAYERS ----
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(layer_ptr parent, char* activation, float param, char* name);
-
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_ReLu(layer_ptr parent);
+	
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Conv(layer_ptr parent, int filters, const int* kernel_size, int kernel_size_count,
             const int* strides, int strides_count, const char* padding, int groups,
             const int* dilation_rate, int dilation_rate_count,
