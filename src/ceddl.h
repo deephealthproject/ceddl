@@ -27,10 +27,10 @@ extern "C" {
     typedef void* model_ptr;
     typedef void* optimizer_ptr;
     typedef void* callback_ptr;
-    typedef void* initializer_ptr;
     typedef void* loss_ptr;
     typedef void* metric_ptr;
     typedef void* compserv_ptr;
+	typedef void* regularizer_ptr;
 
     // ---- TENSOR ----
 	CEDDLL_API tensor_ptr CALLING_CONV ceddl_tensor(const int* shape, int shape_count, float *ptr);
@@ -43,7 +43,7 @@ extern "C" {
 	CEDDLL_API void CALLING_CONV ceddl_div(tensor_ptr t, float v);
 
     // ---- CORE LAYERS ----
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(layer_ptr parent, char* activation, char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(layer_ptr parent, char* activation, float param, char* name);
 
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Conv(layer_ptr parent, int filters, const int* kernel_size, int kernel_size_count,
             const int* strides, int strides_count, const char* padding, int groups,
@@ -178,17 +178,15 @@ extern "C" {
     //    callback StepLR(int step_size, float gamma, int last_epoch);
 
     // ---- INITIALIZERS ----
-	CEDDLL_API initializer_ptr CALLING_CONV ceddl_Constant(float value);
-	CEDDLL_API initializer_ptr CALLING_CONV ceddl_Identity(float gain);
-	CEDDLL_API initializer_ptr CALLING_CONV ceddl_GlorotNormal(float seed);
-	CEDDLL_API initializer_ptr CALLING_CONV ceddl_GlorotUniform(float seed);
-	CEDDLL_API initializer_ptr CALLING_CONV ceddl_RandomNormal(float mean, float std_dev, int seed);
-	CEDDLL_API initializer_ptr CALLING_CONV ceddl_RandomUniform(float min_val, float max_val, int seed);
-	CEDDLL_API initializer_ptr CALLING_CONV ceddl_Orthogonal(float gain, int seed);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Constant(layer_ptr parent, float value);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_GlorotNormal(layer_ptr parent, float seed);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_GlorotUniform(layer_ptr parent, float seed);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_RandomNormal(layer_ptr parent, float mean, float std_dev, int seed);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_RandomUniform(layer_ptr parent, float min_val, float max_val, int seed);
 
 
     // ---- COMPUTING SERVICES ----
-	CEDDLL_API compserv_ptr CALLING_CONV ceddl_CS_CPU(int th, int lsb);
+	CEDDLL_API compserv_ptr CALLING_CONV ceddl_CS_CPU(int th);
 
 	CEDDLL_API compserv_ptr CALLING_CONV ceddl_CS_GPU(const int* g, int g_count, int lsb);
 
@@ -205,7 +203,7 @@ extern "C" {
 		const char** me, int me_count,
 		compserv_ptr cs);
 
-	CEDDLL_API const char* CALLING_CONV ceddl_summary(model_ptr m);
+	CEDDLL_API void CALLING_CONV ceddl_summary(model_ptr m);
 
 	CEDDLL_API void CALLING_CONV ceddl_load(model_ptr m, const char* fname);
 
@@ -222,27 +220,11 @@ extern "C" {
 		const tensor_ptr* in, int in_count,
 		const tensor_ptr* out, int out_count);
 
-	CEDDLL_API void CALLING_CONV ceddl_predict(model_ptr m,
-		const tensor_ptr* in, int in_count,
-		const tensor_ptr* out, int out_count);
-
-	CEDDLL_API model_ptr CALLING_CONV ceddl_load_model(const char* fname);
-	CEDDLL_API void CALLING_CONV ceddl_save_model(model_ptr m, const char* fname);
-	CEDDLL_API void CALLING_CONV ceddl_set_trainable(model_ptr m);
-	CEDDLL_API model_ptr CALLING_CONV ceddl_zoo_models(const char* model_name);
-	CEDDLL_API bool CALLING_CONV ceddl_exist(const char* name);
-
-    // ---- LAYER METHODS ----
-	CEDDLL_API void CALLING_CONV ceddl_set_trainable_layer(layer_ptr l);
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_get_layer(model_ptr m, const char* layer_name);
-
-
     // ---- DATA SETS ----
 	CEDDLL_API void CALLING_CONV ceddl_download_mnist();
 
-    // ---- MODELS FOR TESTING ----
-	CEDDLL_API model_ptr CALLING_CONV ceddl_get_model_mlp(int batch_size);
-
-	CEDDLL_API model_ptr CALLING_CONV ceddl_get_model_cnn(int batch_size);
-
+	// ---- REGULARIZERS ----
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_RegularizerL1(layer_ptr parent, float factor);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_RegularizerL2(layer_ptr parent, float factor);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_RegularizerL1L2(layer_ptr parent, float l1_factor, float l2_factor);
 }
