@@ -222,6 +222,7 @@ extern "C" {
 
     // ---- DATA SETS ----
 	CEDDLL_API void CALLING_CONV ceddl_download_mnist();
+	CEDDLL_API void CALLING_CONV ceddl_download_cifar10();
 
 	// ---- REGULARIZERS ----
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_RegularizerL1(layer_ptr parent, float factor);

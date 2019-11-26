@@ -523,6 +523,10 @@ extern "C" {
 		eddl::download_mnist();
 	}
 	
+	CEDDLL_API void CALLING_CONV ceddl_download_cifar10() {
+		eddl::download_cifar10();
+	}
+	
 	// ---- REGULARIZERS ----
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_RegularizerL1(layer_ptr parent, float factor) {
 		return eddl::L1(transformLayer(parent), factor);
