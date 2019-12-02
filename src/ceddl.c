@@ -56,7 +56,21 @@ extern "C" {
 
 	// ---- TENSOR OPERATIONS ----
 	CEDDLL_API void CALLING_CONV ceddl_div(tensor_ptr t, float v) {
-		eddlT::div(transformTensor(t), v);
+		eddlT::div_(transformTensor(t), v);
+	}
+
+	CEDDLL_API int CALLING_CONV ceddl_ndim(tensor_ptr t) {
+		tensor t1 = transformTensor(t);
+		return t1->ndim;
+	}
+
+	CEDDLL_API int CALLING_CONV ceddl_size(tensor_ptr t) {
+		tensor t1 = transformTensor(t);
+		return t1->size;
+	}
+
+	CEDDLL_API int CALLING_CONV ceddl_info(tensor_ptr t) {
+		eddlT::info(transformTensor(t));
 	}
 
 	// ---- CORE LAYERS ----

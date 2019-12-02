@@ -40,6 +40,9 @@ extern "C" {
 
     // ---- TENSOR OPERATIONS ----
 	CEDDLL_API void CALLING_CONV ceddl_div(tensor_ptr t, float v);
+	CEDDLL_API int CALLING_CONV ceddl_ndim(tensor_ptr t);
+	CEDDLL_API int CALLING_CONV ceddl_size(tensor_ptr t);
+	CEDDLL_API int CALLING_CONV ceddl_info(tensor_ptr t);
 
     // ---- CORE LAYERS ----
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(layer_ptr parent, char* activation, float param, char* name);
