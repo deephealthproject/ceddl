@@ -69,7 +69,7 @@ extern "C" {
 		return t1->size;
 	}
 
-	CEDDLL_API int CALLING_CONV ceddl_info(tensor_ptr t) {
+	CEDDLL_API void CALLING_CONV ceddl_info(tensor_ptr t) {
 		eddlT::info(transformTensor(t));
 	}
 
