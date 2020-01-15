@@ -65,7 +65,7 @@ extern "C" {
             const char* name);
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Reshape(layer_ptr parent, const int* shape, int shape_count, const char* name);
 
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Transpose(layer_ptr parent, const int* dims, int dims_count, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Transpose(layer_ptr parent, const char* name);
 
     // ---- LOSSES ----
 	CEDDLL_API loss_ptr CALLING_CONV ceddl_getLoss(const char* type);

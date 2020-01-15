@@ -155,10 +155,9 @@ extern "C" {
 		return eddl::Reshape(transformLayer(parent), shape_vector, name_str);
 	}
 
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Transpose(layer_ptr parent, const int* dims, int dims_count, const char* name) {
-		const std::vector<int> dims_vector(dims, dims + dims_count);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Transpose(layer_ptr parent, const char* name) {
 		const std::string name_str = string(name);
-		return eddl::Transpose(transformLayer(parent), dims_vector, name_str);
+		return eddl::Transpose(transformLayer(parent), name_str);
 	}
 
 	// ---- LOSSES ----
