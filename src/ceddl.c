@@ -21,8 +21,8 @@ string transformString(const char* s) {
 	return string(s);
 }
 
-layer transformLayer(layer_ptr l) {
-	return static_cast<layer>(l);
+eddl::layer transformLayer(layer_ptr l) {
+	return static_cast<eddl::layer>(l);
 }
 
 tensor transformTensor(tensor_ptr t) {
@@ -74,14 +74,23 @@ extern "C" {
 	}
 
 	// ---- CORE LAYERS ----
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(layer_ptr parent, char* activation, float param, char* name) {
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(layer_ptr parent, char* activation, float* params, int params_size, char* name) {
 		const std::string activation_str = string(activation);
+		const std::vector<float> param_vector(params, params + params_size);
 		const std::string name_str = string(name);
-		return eddl::Activation(transformLayer(parent), activation_str, param, name_str);
+		return eddl::Activation(transformLayer(parent), activation_str, param_vector, name_str);
 	}
 
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Softmax(layer_ptr parent, char* name) {
+		return eddl::Softmax(transformLayer(parent), name);
+	}
+	
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_ReLu(layer_ptr parent) {
 		return eddl::ReLu(transformLayer(parent));
+	}
+	
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_LeakyReLu(layer_ptr parent) {
+		return eddl::LeakyReLu(transformLayer(parent));
 	}
 	
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Conv(layer_ptr parent, int filters,
@@ -98,8 +107,8 @@ extern "C" {
 		const std::string padding_str(padding);
 		return eddl::Conv(
 			transformLayer(parent), filters,
-			kernel_size_vector, strides_vector, padding_str, groups,
-			dilation_rate_vector, use_bias, name_str
+			kernel_size_vector, strides_vector, padding_str, use_bias, groups,
+			dilation_rate_vector, name_str
 		);
 	}
 
@@ -155,6 +164,11 @@ extern "C" {
 		return eddl::Reshape(transformLayer(parent), shape_vector, name_str);
 	}
 
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Flatten(layer_ptr parent, const char* name) {
+		const std::string name_str = string(name);
+		return eddl::Flatten(transformLayer(parent), name_str);
+	}
+	
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Transpose(layer_ptr parent, const char* name) {
 		const std::string name_str = string(name);
 		return eddl::Transpose(transformLayer(parent), name_str);
@@ -174,49 +188,49 @@ extern "C" {
 
 	// ---- MERGE LAYERS ----
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Add(const layer_ptr* layers, int layers_count, const char* name) {
-		std::vector<layer> layers_vector = std::vector<layer>();
+		std::vector<eddl::layer> layers_vector = std::vector<eddl::layer>();
 		fillVector(layers_vector, layers, layers_count, transformLayer);
 		const std::string name_str = string(name);
 		return eddl::Add(layers_vector, name_str);
 	}
 
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Average(const layer_ptr* layers, int layers_count, const char* name) {
-		std::vector<layer> layers_vector = std::vector<layer>();
+		std::vector<eddl::layer> layers_vector = std::vector<eddl::layer>();
 		fillVector(layers_vector, layers, layers_count, transformLayer);
 		const std::string name_str = string(name);
 		return eddl::Average(layers_vector, name_str);
 	}
 
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Concat(const layer_ptr* layers, int layers_count, const char* name) {
-		std::vector<layer> layers_vector = std::vector<layer>();
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Concat(const layer_ptr* layers, int layers_count, unsigned int axis, const char* name) {
+		std::vector<eddl::layer> layers_vector = std::vector<eddl::layer>();
 		fillVector(layers_vector, layers, layers_count, transformLayer);
 		const std::string name_str = string(name);
-		return eddl::Concat(layers_vector, name_str);
+		return eddl::Concat(layers_vector, axis, name_str);
 	}
 
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_MatMul(const layer_ptr* layers, int layers_count, const char* name) {
-		std::vector<layer> layers_vector = std::vector<layer>();
+		std::vector<eddl::layer> layers_vector = std::vector<eddl::layer>();
 		fillVector(layers_vector, layers, layers_count, transformLayer);
 		const std::string name_str = string(name);
 		return eddl::MatMul(layers_vector, name_str);
 	}
 	
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Maximum(const layer_ptr* layers, int layers_count, const char* name) {
-		std::vector<layer> layers_vector = std::vector<layer>();
+		std::vector<eddl::layer> layers_vector = std::vector<eddl::layer>();
 		fillVector(layers_vector, layers, layers_count, transformLayer);
 		const std::string name_str = string(name);
 		return eddl::Maximum(layers_vector, name_str);
 	}
 
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Minimum(const layer_ptr* layers, int layers_count, const char* name) {
-		std::vector<layer> layers_vector = std::vector<layer>();
+		std::vector<eddl::layer> layers_vector = std::vector<eddl::layer>();
 		fillVector(layers_vector, layers, layers_count, transformLayer);
 		const std::string name_str = string(name);
 		return eddl::Minimum(layers_vector, name_str);
 	}
 
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Subtract(const layer_ptr* layers, int layers_count, const char* name) {
-		std::vector<layer> layers_vector = std::vector<layer>();
+		std::vector<eddl::layer> layers_vector = std::vector<eddl::layer>();
 		fillVector(layers_vector, layers, layers_count, transformLayer);
 		const std::string name_str = string(name);
 		return eddl::Subtract(layers_vector, name_str);
@@ -474,8 +488,8 @@ extern "C" {
 
 	// ---- MODEL METHODS ----
 	CEDDLL_API model_ptr CALLING_CONV ceddl_Model(layer_ptr* in, int in_count, layer_ptr* out, int out_count) {
-		std::vector<layer> in_vector = std::vector<layer>();
-		std::vector<layer> out_vector = std::vector<layer>();
+		std::vector<eddl::layer> in_vector = std::vector<eddl::layer>();
+		std::vector<eddl::layer> out_vector = std::vector<eddl::layer>();
 		fillVector(in_vector, in, in_count, transformLayer);
 		fillVector(out_vector, out, out_count, transformLayer);
 		return eddl::Model(in_vector, out_vector);
@@ -486,26 +500,26 @@ extern "C" {
 		std::vector<string> me_vector = std::vector<string>();
 		fillVector(lo_vector, lo, lo_count, transformString);
 		fillVector(me_vector, me, me_count, transformString);
-		eddl::build(static_cast<model>(net), static_cast<optimizer>(o), lo_vector, me_vector, static_cast<compserv>(cs));
+		eddl::build(static_cast<eddl::model>(net), static_cast<eddl::optimizer>(o), lo_vector, me_vector, static_cast<eddl::compserv>(cs));
 	}
 
 	CEDDLL_API void CALLING_CONV ceddl_summary(model_ptr m) {
-		eddl::summary(static_cast<model>(m));
+		eddl::summary(static_cast<eddl::model>(m));
 	}
 
 	CEDDLL_API void CALLING_CONV ceddl_load(model_ptr m, const char* fname) {
 		const std::string fname_str = string(fname);
-		eddl::load(static_cast<model>(m), fname_str);
+		eddl::load(static_cast<eddl::model>(m), fname_str);
 	}
 
 	CEDDLL_API void CALLING_CONV ceddl_save(model_ptr m, const char* fname) {
 		const std::string fname_str = string(fname);
-		eddl::save(static_cast<model>(m), fname_str);
+		eddl::save(static_cast<eddl::model>(m), fname_str);
 	}
 
 	CEDDLL_API void CALLING_CONV ceddl_plot(model_ptr m, const char* fname) {
 		const std::string fname_str = string(fname);
-		eddl::plot(static_cast<model>(m), fname_str);
+		eddl::plot(static_cast<eddl::model>(m), fname_str);
 	}
 
 	CEDDLL_API void CALLING_CONV ceddl_fit(model_ptr m,
@@ -517,7 +531,7 @@ extern "C" {
 		std::vector<tensor> out_vector = std::vector<tensor>();
 		fillVector(in_vector, in, in_count, transformTensor);
 		fillVector(out_vector, out, out_count, transformTensor);
-		eddl::fit(static_cast<model>(m), in_vector, out_vector, batch, epochs);
+		eddl::fit(static_cast<eddl::model>(m), in_vector, out_vector, batch, epochs);
 	}
 
 	CEDDLL_API void CALLING_CONV ceddl_evaluate(model_ptr m,
@@ -528,7 +542,7 @@ extern "C" {
 		std::vector<tensor> out_vector = std::vector<tensor>();
 		fillVector(in_vector, in, in_count, transformTensor);
 		fillVector(out_vector, out, out_count, transformTensor);
-		eddl::evaluate(static_cast<model>(m), in_vector, out_vector);
+		eddl::evaluate(static_cast<eddl::model>(m), in_vector, out_vector);
 	}
 
 	// ---- DATA SETS ----

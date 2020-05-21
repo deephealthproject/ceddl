@@ -45,8 +45,10 @@ extern "C" {
 	CEDDLL_API void CALLING_CONV ceddl_info(tensor_ptr t);
 
     // ---- CORE LAYERS ----
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(layer_ptr parent, char* activation, float param, char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(layer_ptr parent, char* activation, float* params, int params_size, char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Softmax(layer_ptr parent, char* name);
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_ReLu(layer_ptr parent);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_LeakyReLu(layer_ptr parent);
 	
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Conv(layer_ptr parent, int filters, const int* kernel_size, int kernel_size_count,
             const int* strides, int strides_count, const char* padding, int groups,
@@ -64,7 +66,8 @@ extern "C" {
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_UpSampling(layer_ptr parent, const int* size, int size_count, const char* interpolation,
             const char* name);
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Reshape(layer_ptr parent, const int* shape, int shape_count, const char* name);
-
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Flatten(layer_ptr parent, const char* name);
+	
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Transpose(layer_ptr parent, const char* name);
 
     // ---- LOSSES ----
@@ -77,7 +80,7 @@ extern "C" {
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Add(const layer_ptr* layers, int layers_count, const char* name);
 
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Average(const layer_ptr* layers, int layers_count, const char* name);
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Concat(const layer_ptr* layers, int layers_count, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Concat(const layer_ptr* layers, int layers_count, unsigned int axis, const char* name);
 
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_MatMul(const layer_ptr* layers, int layers_count, const char* name);
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Maximum(const layer_ptr* layers, int layers_count, const char* name);
