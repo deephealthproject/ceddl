@@ -43,6 +43,7 @@ extern "C" {
 	CEDDLL_API int CALLING_CONV ceddl_ndim(tensor_ptr t);
 	CEDDLL_API int CALLING_CONV ceddl_size(tensor_ptr t);
 	CEDDLL_API void CALLING_CONV ceddl_info(tensor_ptr t);
+	CEDDLL_API tensor_ptr CALLING_CONV ceddl_select(tensor_ptr t, const char** indices, int indices_count);
 
     // ---- CORE LAYERS ----
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(layer_ptr parent, char* activation, float* params, int params_size, char* name);
@@ -60,7 +61,6 @@ extern "C" {
             const int* strides, int strides_count,
             bool use_bias, const char* name);
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Dense(layer_ptr parent, int num_dim, bool use_bias, const char* name);
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Embedding(int input_dim, int output_dim, const char* name);
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Input(const int* shape, int shape_count, const char* name);
 
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_UpSampling(layer_ptr parent, const int* size, int size_count, const char* interpolation,
@@ -92,8 +92,9 @@ extern "C" {
 
     // ---- NORMALIZATION LAYERS ----
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_BatchNormalization(layer_ptr parent, float momentum, float epsilon, bool affine, const char* name);
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Dropout(layer_ptr parent, float rate, const char* name);
-
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Dropout(layer_ptr parent, float rate, bool perform_weighting, const char* name);
+	CEDDLL_API tensor_ptr CALLING_CONV ceddl_GetOutput(layer_ptr layer);
+	
     // ---- OPERATOR LAYERS ----
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Abs(layer_ptr l);
 
@@ -167,15 +168,6 @@ extern "C" {
         const int* strides, int strides_count,
         const char* padding, const char* name);
 
-
-    // ---- RECURRENT LAYERS ----
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_RNN(layer_ptr parent, int units, int num_layers, bool use_bias, float dropout,
-        bool bidirectional, const char* name);
-
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_LSTM(layer_ptr parent, int units, int num_layers, bool use_bias, float dropout,
-        bool bidirectional, const char* name);
-
-
     //    // ---- LR SCHEDULERS ----
     //    callback CosineAnnealingLR(int T_max, float eta_min, int last_epoch);
     //    callback ExponentialLR(float gamma, int last_epoch);
@@ -209,6 +201,8 @@ extern "C" {
 		const char** me, int me_count,
 		compserv_ptr cs);
 
+	CEDDLL_API void CALLING_CONV ceddl_setlogfile(model_ptr m, const char* fname);
+
 	CEDDLL_API void CALLING_CONV ceddl_summary(model_ptr m);
 
 	CEDDLL_API void CALLING_CONV ceddl_load(model_ptr m, const char* fname);
@@ -226,6 +220,8 @@ extern "C" {
 		const tensor_ptr* in, int in_count,
 		const tensor_ptr* out, int out_count);
 
+	CEDDLL_API void CALLING_CONV ceddl_forward(model_ptr m, const tensor_ptr* in, int in_count);
+		
     // ---- DATA SETS ----
 	CEDDLL_API void CALLING_CONV ceddl_download_mnist();
 	CEDDLL_API void CALLING_CONV ceddl_download_cifar10();

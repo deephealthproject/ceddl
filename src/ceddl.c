@@ -16,6 +16,8 @@
 #include <eddlT.h>
 #include <algorithm>
 #include <iostream>
+#include <eddl/tensor/tensor.h>
+#include <eddl/metrics/metric.h>
 
 string transformString(const char* s) {
 	return string(s);
@@ -71,6 +73,13 @@ extern "C" {
 
 	CEDDLL_API void CALLING_CONV ceddl_info(tensor_ptr t) {
 		eddlT::info(transformTensor(t));
+	}
+
+	CEDDLL_API tensor_ptr CALLING_CONV ceddl_select(tensor_ptr t, const char** indices, int indices_count) {
+		std::vector<string> indices_vector = std::vector<string>();
+		fillVector(indices_vector, indices, indices_count, transformString);
+		const tensor myTensor = transformTensor(t);
+		myTensor->select(indices_vector);
 	}
 
 	// ---- CORE LAYERS ----
@@ -138,11 +147,6 @@ extern "C" {
 		return eddl::Dense(transformLayer(parent), num_dim, use_bias, name_str);
 	}
 
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Embedding(int input_dim, int output_dim, const char* name) {
-		const std::string name_str = string(name);
-		return eddl::Embedding(input_dim, output_dim, name_str);
-	}
-
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Input(const int* shape, int shape_count, const char* name) {
 		const std::vector<int> shape_vector(shape, shape + shape_count);
 		const std::string name_str = string(name);
@@ -184,6 +188,11 @@ extern "C" {
 	CEDDLL_API metric_ptr CALLING_CONV ceddl_getMetric(const char* type) {
 		const std::string type_str = string(type);
 		return eddl::getMetric(type_str);
+	}
+	
+	CEDDLL_API float CALLING_CONV ceddl_getMetricValue(metric_ptr metric, tensor_ptr tensorT, tensor_ptr tensorY) {
+		Metric *myMetric = static_cast<Metric *>(metric);
+		return myMetric->value(transformTensor(tensorT), transformTensor(tensorY));
 	}
 
 	// ---- MERGE LAYERS ----
@@ -248,11 +257,15 @@ extern "C" {
 		return eddl::BatchNormalization(transformLayer(parent), momentum, epsilon, affine, name_str);
 	}
 
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Dropout(layer_ptr parent, float rate, const char* name) {
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Dropout(layer_ptr parent, float rate, bool perform_weighting, const char* name) {
 		const std::string name_str = string(name);
-		return eddl::Dropout(transformLayer(parent), rate, name_str);
+		return eddl::Dropout(transformLayer(parent), rate, perform_weighting, name_str);
 	}
 
+	CEDDLL_API tensor_ptr CALLING_CONV ceddl_GetOutput(layer_ptr layer) {
+		return eddl::getOutput(transformLayer(layer));
+	}
+	
 	// ---- OPERATOR LAYERS ----
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Abs(layer_ptr l) {
 		return eddl::Abs(transformLayer(l));
@@ -421,23 +434,6 @@ extern "C" {
 		return eddl::MaxPool(transformLayer(parent), pool_size_vector, strides_vector, padding_str, name_str);
 	}
 
-
-	// ---- RECURRENT LAYERS ----
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_RNN(layer_ptr parent, int units, int num_layers, bool use_bias, float dropout,
-		bool bidirectional, const char* name
-	) {
-		const std::string name_str = string(name);
-		return eddl::RNN(transformLayer(parent), units, num_layers, use_bias, dropout, bidirectional, name_str);
-	}
-
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_LSTM(layer_ptr parent, int units, int num_layers, bool use_bias, float dropout,
-		bool bidirectional, const char* name
-	) {
-		const std::string name_str = string(name);
-		return eddl::LSTM(transformLayer(parent), units, num_layers, use_bias, dropout, bidirectional, name_str);
-	}
-
-
 	//    // ---- LR SCHEDULERS ----
 	//    callback CosineAnnealingLR(int T_max, float eta_min, int last_epoch);
 	//    callback ExponentialLR(float gamma, int last_epoch);
@@ -503,6 +499,11 @@ extern "C" {
 		eddl::build(static_cast<eddl::model>(net), static_cast<eddl::optimizer>(o), lo_vector, me_vector, static_cast<eddl::compserv>(cs));
 	}
 
+	CEDDLL_API void CALLING_CONV ceddl_setlogfile(model_ptr m, const char* fname) {
+		const std::string fname_str = string(fname);
+		eddl::setlogfile(static_cast<eddl::model>(m), fname_str);
+	}
+
 	CEDDLL_API void CALLING_CONV ceddl_summary(model_ptr m) {
 		eddl::summary(static_cast<eddl::model>(m));
 	}
@@ -545,6 +546,12 @@ extern "C" {
 		eddl::evaluate(static_cast<eddl::model>(m), in_vector, out_vector);
 	}
 
+	CEDDLL_API void CALLING_CONV ceddl_forward(model_ptr m, const tensor_ptr* in, int in_count) {
+		std::vector<tensor> in_vector = std::vector<tensor>();
+		fillVector(in_vector, in, in_count, transformTensor);
+		eddl::forward(static_cast<eddl::model>(m), in_vector);
+	}
+	
 	// ---- DATA SETS ----
 	CEDDLL_API void CALLING_CONV ceddl_download_mnist() {
 		eddl::download_mnist();
