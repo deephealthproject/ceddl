@@ -79,7 +79,7 @@ extern "C" {
 		std::vector<string> indices_vector = std::vector<string>();
 		fillVector(indices_vector, indices, indices_count, transformString);
 		const tensor myTensor = transformTensor(t);
-		myTensor->select(indices_vector);
+		return myTensor->select(indices_vector);
 	}
 
 	// ---- CORE LAYERS ----
