@@ -78,8 +78,8 @@ extern "C" {
 	CEDDLL_API tensor_ptr CALLING_CONV ceddl_select(tensor_ptr t, const char** indices, int indices_count) {
 		std::vector<string> indices_vector = std::vector<string>();
 		fillVector(indices_vector, indices, indices_count, transformString);
-		const tensor myTensor = transformTensor(t);
-		return myTensor->select(indices_vector);
+		tensor t1 = transformTensor(t);
+		return t1->select(indices_vector);
 	}
 
 	// ---- CORE LAYERS ----
