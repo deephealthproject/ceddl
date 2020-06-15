@@ -44,21 +44,23 @@ extern "C" {
 	// ---- TENSOR ----
 	CEDDLL_API tensor_ptr CALLING_CONV ceddl_tensor(const int* shape, int shape_count, float *ptr) {
 		const std::vector<int> shape_vector(shape, shape + shape_count);
-		return eddlT::create(shape_vector, ptr);
+		return new Tensor(shape_vector, ptr);
 	}
 
 	CEDDLL_API tensor_ptr CALLING_CONV ceddl_tensor_load(const char* fname) {
 		const std::string filename = string(fname);
-		return eddlT::load(filename);
+		return Tensor::load(filename);
 	}
 
 	CEDDLL_API float* CALLING_CONV ceddl_tensor_getptr(tensor_ptr t) {
-		return eddlT::getptr(transformTensor(t));
+		tensor t1 = transformTensor(t);
+		return t1->ptr;
 	}
 
 	// ---- TENSOR OPERATIONS ----
 	CEDDLL_API void CALLING_CONV ceddl_div(tensor_ptr t, float v) {
-		eddlT::div_(transformTensor(t), v);
+		tensor t1 = transformTensor(t);
+		return t1->div_(v);
 	}
 
 	CEDDLL_API int CALLING_CONV ceddl_ndim(tensor_ptr t) {
@@ -72,7 +74,8 @@ extern "C" {
 	}
 
 	CEDDLL_API void CALLING_CONV ceddl_info(tensor_ptr t) {
-		eddlT::info(transformTensor(t));
+		tensor t1 = transformTensor(t);
+		t1->info();
 	}
 
 	CEDDLL_API tensor_ptr CALLING_CONV ceddl_select(tensor_ptr t, const char** indices, int indices_count) {
