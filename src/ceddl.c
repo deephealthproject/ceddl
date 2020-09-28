@@ -82,7 +82,9 @@ extern "C" {
 	// ---- TENSOR ----
 	CEDDLL_API tensor_ptr CALLING_CONV ceddl_tensor(const int* shape, int shape_count, float *data) {
 		const std::vector<int> shape_vector(shape, shape + shape_count);
-		return new Tensor(shape_vector, data);
+		// Either 'DEV_CPU' or `DEV_GPU`
+		// DEV_CPU - 0,DEV_GPU = 1000
+		return new Tensor(shape_vector, data, 0);
 	}
 
 	CEDDLL_API tensor_ptr CALLING_CONV ceddl_tensor_load(const char* fname) {
