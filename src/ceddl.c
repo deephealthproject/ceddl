@@ -37,7 +37,8 @@ eddl::layer transformLayer(layer_ptr l, string type) {
 		type == "Activation" ||
 		type == "Softmax" ||
 		type == "ReLu" ||
-		type == "LeakyReLu"
+		type == "LeakyReLu" ||
+		type == "Sigmoid"
 	) {
 		myLayer = static_cast<LActivation *>(l);
 	} else if (type == "Convolution") {
@@ -52,6 +53,10 @@ eddl::layer transformLayer(layer_ptr l, string type) {
 		type == "Flatten"
 	) {
 		myLayer = static_cast<LReshape *>(l);
+	} else if (type == "Concat") {
+		myLayer = static_cast<LConcat *>(l);
+	} else if (type == "BatchNormalization") {
+		myLayer = static_cast<LBatchNorm *>(l);
 	}
 	return myLayer;
 }
@@ -314,6 +319,11 @@ extern "C" {
 		return eddl::Activation(transformLayer(parent, parent_type_str), activation_str, param_vector, name_str);
 	}
 
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Sigmoid(layer_ptr parent, const char* parentType, char* name) {
+		const std::string parent_type_str = string(parent_type);
+		return eddl::Sigmoid(transformLayer(parent, parent_type_str), name);
+	}
+
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Softmax(layer_ptr parent, const char* parent_type, char* name) {
 		const std::string parent_type_str = string(parent_type);
 		return eddl::Softmax(transformLayer(parent, parent_type_str), name);
@@ -386,15 +396,25 @@ extern "C" {
 	}
 
 	// ---- MERGE LAYERS ----
-	
+
+	CEDDLL_API model_ptr CALLING_CONV ceddl_Concat(
+		layer_ptr* in, int in_count, const char** in_types
+	) {
+		std::vector<string> in_types_vector = std::vector<string>();
+		fillVector(in_types_vector, in_types, in_count, transformString);
+		std::vector<eddl::layer> in_vector = std::vector<eddl::layer>();
+		fillVectorWithTypes(in_vector, in, in_count, transformLayer, in_types_vector);
+		return eddl::Concat(in_vector);
+	}
+
 	// ---- NOISE LAYERS ----
 
 	// ---- NORMALIZATION LAYERS ----
-
-	CEDDLL_API tensor_ptr CALLING_CONV ceddl_GetOutput(layer_ptr layer, const char* layerType) {
-		return eddl::getOutput(transformLayer(layer, layerType));
-	}
 	
+	CEDDLL_API tensor_ptr CALLING_CONV ceddl_BatchNormalization(layer_ptr layer, const char* layerType) {
+		return eddl::BatchNormalization(transformLayer(layer, layerType));
+	}
+
 	// ---- OPERATOR LAYERS ----
 
 	// ---- REDUCTION LAYERS ----
@@ -424,6 +444,18 @@ extern "C" {
 	}
 
 	// Recurrent Layers
+
+    //////////////////////////////
+    // Layers Methods
+    //////////////////////////////
+
+	////////////////////////////////////
+    // Manage Tensors inside Layers
+    ////////////////////////////////////
+
+	CEDDLL_API tensor_ptr CALLING_CONV ceddl_GetOutput(layer_ptr layer, const char* layerType) {
+		return eddl::getOutput(transformLayer(layer, layerType));
+	}
 
 	///////////////////////////////////////
     //  INITIALIZERS

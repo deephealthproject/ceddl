@@ -114,6 +114,7 @@ extern "C" {
 		float* params, int params_size,
 		char* name
     );
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Sigmoid(layer_ptr parent, const char* parentType, char* name);
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Softmax(layer_ptr parent, const char* parentType, char* name);
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_ReLu(layer_ptr parent, const char* parentType);
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_LeakyReLu(layer_ptr parent, const char* parentType);
@@ -142,12 +143,16 @@ extern "C" {
 
 	// ---- MERGE LAYERS ----
 	
+	CEDDLL_API model_ptr CALLING_CONV ceddl_Concat(
+		layer_ptr* in, int in_count, const char** in_types
+	);
+
 	// ---- NOISE LAYERS ----
 
 	// ---- NORMALIZATION LAYERS ----
-
-	CEDDLL_API tensor_ptr CALLING_CONV ceddl_GetOutput(layer_ptr layer, const char* layerType);
 	
+	CEDDLL_API tensor_ptr CALLING_CONV ceddl_BatchNormalization(layer_ptr layer, const char* layerType);
+
 	// ---- OPERATOR LAYERS ----
 
 	// ---- REDUCTION LAYERS ----
@@ -166,6 +171,16 @@ extern "C" {
 	);
 
 	// Recurrent Layers
+
+    //////////////////////////////
+    // Layers Methods
+    //////////////////////////////
+
+	////////////////////////////////////
+    // Manage Tensors inside Layers
+    ////////////////////////////////////
+
+	CEDDLL_API tensor_ptr CALLING_CONV ceddl_GetOutput(layer_ptr layer, const char* layerType);
 
 	///////////////////////////////////////
     //  INITIALIZERS
