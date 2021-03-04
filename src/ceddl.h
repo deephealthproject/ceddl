@@ -109,17 +109,17 @@ extern "C" {
 
 	// Core Layers
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(
-		layer_ptr parent, const char* parentType,
+		layer_ptr parent, const char* parent_type,
 		char* activation,
 		float* params, int params_size,
 		char* name
     );
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Sigmoid(layer_ptr parent, const char* parentType, char* name);
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Softmax(layer_ptr parent, const char* parentType, char* name);
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_ReLu(layer_ptr parent, const char* parentType);
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_LeakyReLu(layer_ptr parent, const char* parentType);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Sigmoid(layer_ptr parent, const char* parent_type, char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Softmax(layer_ptr parent, const char* parent_type, char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_ReLu(layer_ptr parent, const char* parent_type);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_LeakyReLu(layer_ptr parent, const char* parent_type);
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Conv(
-		layer_ptr parent, const char* parentType,
+		layer_ptr parent, const char* parent_type,
 		int filters,
 		const int* kernel_size, int kernel_size_count,
 		const int* strides, int strides_count,
@@ -128,18 +128,18 @@ extern "C" {
 		bool use_bias, const char* name
 	);
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Dense(
-		layer_ptr parent, const char* parentType,
+		layer_ptr parent, const char* parent_type,
 		int num_dim,
 		bool use_bias,
 		const char* name
 	);
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Input(const int* shape, int shape_count, const char* name);
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Reshape(
-		layer_ptr parent, const char* parentType,
+		layer_ptr parent, const char* parent_type,
 		const int* shape, int shape_count,
 		const char* name
 	);
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Flatten(layer_ptr parent, const char* parentType, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Flatten(layer_ptr parent, const char* parent_type, const char* name);
 
 	// ---- MERGE LAYERS ----
 	
@@ -151,7 +151,7 @@ extern "C" {
 
 	// ---- NORMALIZATION LAYERS ----
 	
-	CEDDLL_API tensor_ptr CALLING_CONV ceddl_BatchNormalization(layer_ptr layer, const char* layerType);
+	CEDDLL_API tensor_ptr CALLING_CONV ceddl_BatchNormalization(layer_ptr layer, const char* layer_type);
 
 	// ---- OPERATOR LAYERS ----
 
@@ -161,10 +161,10 @@ extern "C" {
 
 	// ---- POOLING LAYERS ----
 
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_GlobalMaxPool(layer_ptr parent, const char* parentType, const char* name);
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_GlobalMaxPool(layer_ptr parent, const char* parent_type, const char* name);
 	
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_MaxPool(
-		layer_ptr parent, const char* parentType,
+		layer_ptr parent, const char* parent_type,
 		const int* pool_size, int pool_size_count,
 		const int* strides, int strides_count,
 		const char* padding, const char* name
@@ -180,7 +180,7 @@ extern "C" {
     // Manage Tensors inside Layers
     ////////////////////////////////////
 
-	CEDDLL_API tensor_ptr CALLING_CONV ceddl_GetOutput(layer_ptr layer, const char* layerType);
+	CEDDLL_API tensor_ptr CALLING_CONV ceddl_GetOutput(layer_ptr layer, const char* layer_type);
 
 	///////////////////////////////////////
     //  INITIALIZERS

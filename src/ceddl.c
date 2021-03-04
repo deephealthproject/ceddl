@@ -319,14 +319,14 @@ extern "C" {
 		return eddl::Activation(transformLayer(parent, parent_type_str), activation_str, param_vector, name_str);
 	}
 
-	CEDDLL_API layer_ptr CALLING_CONV ceddl_Sigmoid(layer_ptr parent, const char* parentType, char* name) {
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_Sigmoid(layer_ptr parent, const char* parent_type, char* name) {
 		const std::string parent_type_str = string(parent_type);
 		return eddl::Sigmoid(transformLayer(parent, parent_type_str), name);
 	}
 
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Softmax(layer_ptr parent, const char* parent_type, char* name) {
 		const std::string parent_type_str = string(parent_type);
-		return eddl::Softmax(transformLayer(parent, parent_type_str), name);
+		return eddl::Softmax(transformLayer(parent, parent_type_str), -1, name);
 	}
 	
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_ReLu(layer_ptr parent, const char* parent_type) {
@@ -411,8 +411,8 @@ extern "C" {
 
 	// ---- NORMALIZATION LAYERS ----
 	
-	CEDDLL_API tensor_ptr CALLING_CONV ceddl_BatchNormalization(layer_ptr layer, const char* layerType) {
-		return eddl::BatchNormalization(transformLayer(layer, layerType));
+	CEDDLL_API tensor_ptr CALLING_CONV ceddl_BatchNormalization(layer_ptr layer, const char* layer_type) {
+		return eddl::BatchNormalization(transformLayer(layer, layer_type));
 	}
 
 	// ---- OPERATOR LAYERS ----
@@ -453,8 +453,8 @@ extern "C" {
     // Manage Tensors inside Layers
     ////////////////////////////////////
 
-	CEDDLL_API tensor_ptr CALLING_CONV ceddl_GetOutput(layer_ptr layer, const char* layerType) {
-		return eddl::getOutput(transformLayer(layer, layerType));
+	CEDDLL_API tensor_ptr CALLING_CONV ceddl_GetOutput(layer_ptr layer, const char* layer_type) {
+		return eddl::getOutput(transformLayer(layer, layer_type));
 	}
 
 	///////////////////////////////////////
