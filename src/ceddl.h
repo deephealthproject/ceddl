@@ -134,7 +134,7 @@ extern "C" {
 		const char* name
 	);
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Input(const int* shape, int shape_count, const char* name);
-	CEDDLL_API layer_ptr CALLING_CONV UpSampling(
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_UpSampling(
 		layer_ptr parent, const char* parent_type,
 		const int* size, int size_count,
 		const char* interpolation,

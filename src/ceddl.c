@@ -380,7 +380,7 @@ extern "C" {
 		return eddl::Input(shape_vector, name_str);
 	}
 
-	CEDDLL_API layer_ptr CALLING_CONV UpSampling(
+	CEDDLL_API layer_ptr CALLING_CONV ceddl_UpSampling(
 		layer_ptr parent, const char* parent_type,
 		const int* size, int size_count,
 		const char* interpolation,
