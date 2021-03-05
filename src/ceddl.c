@@ -57,6 +57,8 @@ eddl::layer transformLayer(layer_ptr l, string type) {
 		myLayer = static_cast<LConcat *>(l);
 	} else if (type == "BatchNormalization") {
 		myLayer = static_cast<LBatchNorm *>(l);
+	} else if (type == "UpSampling") {
+		myLayer = static_cast<LUpSampling *>(l);
 	}
 	return myLayer;
 }
@@ -376,6 +378,19 @@ extern "C" {
 		const std::vector<int> shape_vector(shape, shape + shape_count);
 		const std::string name_str = string(name);
 		return eddl::Input(shape_vector, name_str);
+	}
+
+	CEDDLL_API layer_ptr CALLING_CONV UpSampling(
+		layer_ptr parent, const char* parent_type,
+		const int* size, int size_count,
+		const char* interpolation,
+		const char* name
+	) {
+		const std::vector<int> size_vector(size, size + size_count);
+		const std::string interpolation_str = string(interpolation);
+		const std::string name_str = string(name);
+		const std::string parent_type_str = string(parent_type);
+		return eddl::UpSampling(transformLayer(parent, parent_type_str), size_vector, interpolation_str, name_str);	
 	}
 
 	CEDDLL_API layer_ptr CALLING_CONV ceddl_Reshape(
