@@ -16,7 +16,7 @@ OBJECTS=ceddl.o
 # Link to generate a dynamic library (.so)
 # For debug lib you have to link in -leddld
 Ceddl: $(OBJECTS)
-	$(LN) -shared -o $(LIBNAME) $(OBJECTS) -Wl,-rpath,. -L$//ceddl/src -L$//eddl/build/lib -leddl
+	$(LN) -shared -o $(LIBNAME) $(OBJECTS) -Wl,-rpath,. -L$//ceddl/src -L$//eddl/build/lib64 -leddl
 
 clean:
 	rm -f *.o $(LIBNAME)

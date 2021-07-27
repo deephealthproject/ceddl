@@ -13,7 +13,7 @@ docker build . -f.\src\Dockerfile --tag philips/buildceddl --build-arg http_prox
 docker run -it -d --name buildceddlcontainer --rm philips/buildceddl bash
 
 :: Copy shared libraries from the container
-docker cp buildceddlcontainer:/eddl/build/lib/libeddl.so ./output
+docker cp buildceddlcontainer:/eddl/build/lib64/libeddl.so ./output
 docker cp buildceddlcontainer:/ceddl/src/libceddl.so ./output
 
 :: kill container.

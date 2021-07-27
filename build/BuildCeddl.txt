@@ -8,7 +8,9 @@ Preparation:
 
 Execution:
 ++++++++++
-Run .\build\BuildCEDDLLinux.bat
+1. Checkout ceddl archive: git clone https://github.com/deephealthproject/ceddl.git
+2. Goto build directory
+3. Execute .\BuildCEDDLLinux.bat from powershell
 
 To check if libceddl.so is ok:
 1. Modify BuildCEDDLLinux.bat:
@@ -20,15 +22,8 @@ To check if libceddl.so is ok:
 6. ldd libceddl.so
    This should results in no errors, all dependencies of the library should be found.
 
-If there are problems or you want to update ceddl.c or ceddl.h
-Prerequisite: Previous steps.
-1. Checkout eddl archive: git clone https://github.com/deephealthproject/eddl.git
-    git checkout <tag> if you need a specific version
-    Note: checking out eddl and opening in VSCode helps to inspect interfaces
-2. Checkout ceddl archive: git clone https://github.com/deephealthproject/ceddl.git
-3. Open ceddl archive in VSCode
-4. Make changes
-5. Run .\build\BuildCEDDLLinux.bat
+If you want to update ceddl with new functions it might be convenient to also clone the EDDL archive:
+git clone https://github.com/deephealthproject/eddl.git
 
 In case of issues with eddl there is a slack channel you can post questions to:
 deephealthproject.slack.com

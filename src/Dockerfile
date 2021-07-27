@@ -1,14 +1,14 @@
-FROM hsdp-cp-docker.artifactory-ehv.ta.philips.com/application-service-base:1.0.0 AS build-EDDL
+FROM alpine:3.13
 
 # Install prerequisites
-RUN apt-get update && \
-    apt-get install -y \
-    git \
-    cmake \
-    build-essential \
-    zlib1g-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk update && \ 
+    apk add build-base=0.5-r2 && \
+    apk add bash=5.1.0-r0 && \
+    apk add libexecinfo-dev=1.1-r1 && \
+    apk add git && \
+    apk add cmake && \
+    apk add zlib-dev && \
+    rm -rf /var/cache/apk/*  
 
 # Build the eddl.so from the develop branch
 RUN echo "START GIT CLONE OF EDDL" && \
