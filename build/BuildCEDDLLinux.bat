@@ -3,6 +3,8 @@ pushd %~dp0\.\..\
 :: remove image - not needed if contents changes (is being picked up)
 :: docker rmi -f philips/buildceddl
 
+if not exist bin mkdir output
+
 :: build image
 docker build . -f.\src\Dockerfile --tag philips/buildceddl --build-arg http_proxy=%http_proxy% --build-arg https_proxy=%https_proxy%
 
