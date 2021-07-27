@@ -1,8 +1,5 @@
 pushd %~dp0\.\..\
 
-:: remove image - not needed if contents changes (is being picked up)
-:: docker rmi -f philips/buildceddl
-
 if not exist bin mkdir output
 
 :: build image

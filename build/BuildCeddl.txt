@@ -17,8 +17,8 @@ To check if libceddl.so is ok:
    Comment out the lines at the end that do the cleanup (docker kill + rmi)
 2. Run the script again from a powershell
 3. To inspect the docker image: docker run -it philips/buildceddl bash
-4. Go to /usr/ceddl/src
-5. cp /usr/eddl/build/lib64/libeddl.so .  // Because else the contents of the library cannot be inspected
+4. Go to /ceddl/src
+5. cp /eddl/build/lib64/libeddl.so .  // Because else the contents of the library cannot be inspected
 6. ldd libceddl.so
    This should results in no errors, all dependencies of the library should be found.
 
