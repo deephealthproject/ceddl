@@ -30,6 +30,7 @@ extern "C" {
     typedef void* loss_ptr;
     typedef void* metric_ptr;
     typedef void* compserv_ptr;
+    typedef void* net_ptr;
 
     // ---- TENSOR ----
     CEDDLL_API tensor_ptr CALLING_CONV ceddl_tensor(const int* shape, int shape_count, float *data);
@@ -202,4 +203,6 @@ extern "C" {
     
     CEDDLL_API void CALLING_CONV ceddl_download_mnist();
     CEDDLL_API void CALLING_CONV ceddl_download_cifar10();
+    CEDDLL_API net_ptr Calling_CONV ceddl_import_onnx(const char* path, int mem);
+    CEDDLL_API net_ptr Calling_CONV ceddl_import_onnx(const char* path, std::vector<int> input_shape, int mem);
 }

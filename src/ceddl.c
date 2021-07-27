@@ -490,4 +490,13 @@ extern "C" {
     CEDDLL_API void CALLING_CONV ceddl_download_cifar10() {
         eddl::download_cifar10();
     }
+    
+    // Load onnx format data
+    CEDDLL_API net_ptr Calling_CONV ceddl_import_onnx(const char* path, int mem) {
+        return eddl:import_net_from_onnx_file(path, mem);
+    }
+    
+    CEDDLL_API net_ptr Calling_CONV ceddl_import_onnx(const char* path, std::vector<int> input_shape, int mem) {
+        return eddl:import_net_from_onnx_file(path, input_shape, mem);
+    }
 }
