@@ -1,0 +1,29 @@
+# the name of the binary
+LIBNAME=libceddl.so
+
+# the name of the c compiler:
+CC=g++
+
+# the linker:
+LN=$(CC)
+
+# set the flag to create a dynamic library and the directory to find the source in.
+CFLAGS= -I$//ceddl/src -I$//eddl/include/eddl/apis -I$//eddl/include -I$//eddl/build/cmake/third_party/eigen/include/eigen3 -fPIC
+
+# our objects:
+OBJECTS=ceddl.o
+
+# Link to generate a dynamic library (.so)
+# For debug lib you have to link in -leddld
+Ceddl: $(OBJECTS)
+	$(LN) -shared -o $(LIBNAME) $(OBJECTS) -Wl,-rpath,. -L$//ceddl/src -L$//eddl/build/lib -leddl
+
+clean:
+	rm -f *.o $(LIBNAME)
+
+# dependencies of the object files
+# For printing symbols i.s.o. addresses in the backtrace, the '-rdynamic' flag should also be given,
+# next to the '-g' flag, to the compilation of the other binaries in the same process.
+# The '-rdynamic' flag is a link flag; aparently when given as compile flag, it's passed through.
+ceddl.o: ceddl.c
+	$(CC) $(CFLAGS) -g -rdynamic -c ceddl.c 
