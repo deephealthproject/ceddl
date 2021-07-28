@@ -13,8 +13,8 @@ docker run -it -d --name buildceddlcontainer --rm philips/buildceddl bash
 docker cp buildceddlcontainer:/eddl/build/lib64/libeddl.so ./output
 docker cp buildceddlcontainer:/ceddl/src/libceddl.so ./output
 
-@REM :: kill container.
-@REM docker kill buildceddlcontainer
-@REM docker rmi -f philips/buildceddl
+:: kill container.
+docker kill buildceddlcontainer
+docker rmi -f philips/buildceddl
 
 popd
