@@ -13,7 +13,6 @@
 
 #include <ceddl.h>
 #include <eddl.h>
-#include <eddlT.h>
 #include <algorithm>
 #include <iostream>
 #include <eddl/tensor/tensor.h>
@@ -140,7 +139,19 @@ extern "C" {
     ///////////////////////////////////////
     //  MODEL METHODS
     ///////////////////////////////////////
-
+    
+    // Load onnx format data
+    // CEDDLL_API model_ptr CALLING_CONV ceddl_import_onnx(const char* path, int mem) {
+    //     std::string path_string = string(path);
+    //     return eddl::import_net_from_onnx_file(path_string, mem);
+    // }
+    
+    // CEDDLL_API model_ptr CALLING_CONV ceddl_import_onnx(const char* path, const int* input_shape, int input_shape_count, int mem) {
+    //     std::string path_string = string(path);
+    //     const std::vector<int> shape_vector(input_shape, input_shape + input_shape_count);
+    //     return eddl::import_net_from_onnx_file(path_string, shape_vector, mem);
+    // }
+    
     // Creation
     CEDDLL_API model_ptr CALLING_CONV ceddl_Model(
         layer_ptr* in, int in_count, const char** in_types,
@@ -490,13 +501,5 @@ extern "C" {
     CEDDLL_API void CALLING_CONV ceddl_download_cifar10() {
         eddl::download_cifar10();
     }
-    
-    // Load onnx format data
-    CEDDLL_API net_ptr Calling_CONV ceddl_import_onnx(const char* path, int mem) {
-        return eddl:import_net_from_onnx_file(path, mem);
-    }
-    
-    CEDDLL_API net_ptr Calling_CONV ceddl_import_onnx(const char* path, std::vector<int> input_shape, int mem) {
-        return eddl:import_net_from_onnx_file(path, input_shape, mem);
-    }
 }
+    

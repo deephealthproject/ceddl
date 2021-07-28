@@ -59,6 +59,7 @@ dkms.conf
 *.sln.DotSettings.user
 *.suo
 .vs/
+.vscode/settings.json
 
 # CMake generated files
 CMakeCache.txt
@@ -68,3 +69,4 @@ CMakeFiles/
 
 # Build results
 x64/
+.vscode/settings.json
