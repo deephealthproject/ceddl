@@ -55,8 +55,7 @@ extern "C" {
     ///////////////////////////////////////
     
     // Load onnx format data
-    // CEDDLL_API model_ptr CALLING_CONV ceddl_import_onnx(const char* path, int mem);
-    // CEDDLL_API model_ptr CALLING_CONV ceddl_import_onnx(const char* path, const int* input_shape, int input_shape_count, int mem);
+    CEDDLL_API model_ptr CALLING_CONV ceddl_import_onnx(const char* path, const int* input_shape, int input_shape_count);
     
     // Creation
     CEDDLL_API model_ptr CALLING_CONV ceddl_Model(
