@@ -14,8 +14,8 @@ RUN apk update && \
 RUN echo "START GIT CLONE OF EDDL" && \
     git clone --recurse-submodules -j8 https://github.com/deephealthproject/eddl.git && \
     cd eddl && \
-    # checkout the specific version the ceddl will be built against (1-Mar-2021)
-    git checkout 676c91823e9483589fc05e51a6191755b27a0e49 && \
+    # checkout the specific version the ceddl will be built against (26-May-2021)
+    git checkout 77451e18cbfcab02706cb7156a27b6e53ece5aa6 && \
     mkdir build && \
     cd build && \
     echo "START CMAKE EDDL" && \

@@ -59,6 +59,7 @@ dkms.conf
 *.sln.DotSettings.user
 *.suo
 .vs/
+.vscode/
 
 # CMake generated files
 CMakeCache.txt

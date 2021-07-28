@@ -13,7 +13,6 @@
 
 #include <ceddl.h>
 #include <eddl.h>
-#include <eddlT.h>
 #include <algorithm>
 #include <iostream>
 #include <eddl/tensor/tensor.h>
@@ -22,6 +21,7 @@
 #include <eddl/layers/core/layer_core.h>
 #include <eddl/layers/conv/layer_conv.h>
 #include <eddl/layers/pool/layer_pool.h>
+#include <eddl/serialization/onnx/eddl_onnx.h>
 
 string transformString(const char* s) {
     return string(s);
@@ -140,7 +140,14 @@ extern "C" {
     ///////////////////////////////////////
     //  MODEL METHODS
     ///////////////////////////////////////
-
+    
+    // Load onnx format data
+    CEDDLL_API model_ptr CALLING_CONV ceddl_import_onnx(const char* path, const int* input_shape, int input_shape_count) {
+        std::string path_string = string(path);
+        const std::vector<int> shape_vector(input_shape, input_shape + input_shape_count);
+        return import_net_from_onnx_file(path_string, shape_vector);
+    }
+    
     // Creation
     CEDDLL_API model_ptr CALLING_CONV ceddl_Model(
         layer_ptr* in, int in_count, const char** in_types,
@@ -491,3 +498,4 @@ extern "C" {
         eddl::download_cifar10();
     }
 }
+    
