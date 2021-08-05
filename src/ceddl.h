@@ -114,6 +114,9 @@ extern "C" {
     //  LAYERS
     ///////////////////////////////////////
 
+    // Output Layer
+    CEDDLL_API layer_ptr CALLING_CONV ceddl_GetOut(model_ptr net);
+
     // Core Layers
     CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(
         layer_ptr parent, const char* parent_type,

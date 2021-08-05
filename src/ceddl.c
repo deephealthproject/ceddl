@@ -314,6 +314,12 @@ extern "C" {
     //  LAYERS
     ///////////////////////////////////////
 
+    // Get output layer
+    CEDDLL_API layer_ptr CALLING_CONV ceddl_GetOut(model_ptr net){
+        layer_ptr outlayer = eddl::getOut(static_cast<eddl::model>(net))[0];
+        return outlayer;
+    }
+
     // Core Layers
     CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(
         layer_ptr parent, const char* parent_type,
