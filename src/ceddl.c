@@ -314,7 +314,7 @@ extern "C" {
     //  LAYERS
     ///////////////////////////////////////
 
-    // Get output layer
+    // Get first output layer
     CEDDLL_API layer_ptr CALLING_CONV ceddl_GetOut(model_ptr net){
         layer_ptr outlayer = eddl::getOut(static_cast<eddl::model>(net))[0];
         return outlayer;
