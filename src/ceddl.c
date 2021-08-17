@@ -18,6 +18,7 @@
 #include <eddl/tensor/tensor.h>
 #include <eddl/metrics/metric.h>
 #include <eddl/optimizers/optim.h>
+#include <eddl/layers/layer.h>
 #include <eddl/layers/core/layer_core.h>
 #include <eddl/layers/conv/layer_conv.h>
 #include <eddl/layers/pool/layer_pool.h>
@@ -85,6 +86,10 @@ void fillVectorWithTypes(std::vector<T> &vector, const T_ptr* arr, int arr_count
 
 
 extern "C" {
+    // Debug
+    CEDDLL_API void CALLING_CONV ceddl_debug_string(const char* string_to_debug) {
+        printf("%s", string_to_debug);
+    }
 
     // ---- TENSOR ----
     CEDDLL_API tensor_ptr CALLING_CONV ceddl_tensor(const int* shape, int shape_count, float *data) {
@@ -215,6 +220,10 @@ extern "C" {
     CEDDLL_API void CALLING_CONV ceddl_plot(model_ptr m, const char* fname) {
         const std::string fname_str = string(fname);
         eddl::plot(static_cast<eddl::model>(m), fname_str);
+    }
+
+    CEDDLL_API char* CALLING_CONV ceddl_layer_plot(int c, layer_ptr layer) {
+        return layer -> LinLayer::plot(c);
     }
 
     // Serialization
