@@ -117,7 +117,7 @@ extern "C" {
     //  LAYERS
     ///////////////////////////////////////
 
-    // Get output layer
+    // Get first output layer
     CEDDLL_API layer_ptr CALLING_CONV ceddl_getOut(model_ptr m);
 
     // Core Layers
