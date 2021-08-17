@@ -86,9 +86,13 @@ void fillVectorWithTypes(std::vector<T> &vector, const T_ptr* arr, int arr_count
 
 
 extern "C" {
-    // Debug
-    CEDDLL_API void CALLING_CONV ceddl_debug_string(const char* string_to_debug) {
-        printf("%s", string_to_debug);
+    // ----- Debug -----
+    // Print strings
+    CEDDLL_API void CALLING_CONV ceddl_debug_string(const char* string_to_debug) {  
+        std::stringstream ss;
+        ss << string_to_debug << std::endl;
+
+        cout << ss.str() << "\n";
     }
 
     // ---- TENSOR ----
@@ -222,8 +226,8 @@ extern "C" {
         eddl::plot(static_cast<eddl::model>(m), fname_str);
     }
 
-    CEDDLL_API char* CALLING_CONV ceddl_layer_plot(int c, layer_ptr layer) {
-        return layer -> LinLayer::plot(c);
+    CEDDLL_API std::string CALLING_CONV ceddl_layer_plot(int c, layer_ptr m) {
+        return static_cast<eddl::layer>(m) -> plot(c);
     }
 
     // Serialization
@@ -322,6 +326,11 @@ extern "C" {
     ///////////////////////////////////////
     //  LAYERS
     ///////////////////////////////////////
+
+    // Get output
+    CEDDLL_API layer_ptr CALLING_CONV ceddl_getOut(model_ptr m) {
+        return eddl::getOut(static_cast<eddl::model>(m))[0];
+    }
 
     // Core Layers
     CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(
