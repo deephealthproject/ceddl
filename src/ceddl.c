@@ -328,7 +328,8 @@ extern "C" {
         return static_cast<eddl::layer>(m) -> plot(c);
     }
 
-    // Get output
+
+    // Get first output layer
     CEDDLL_API layer_ptr CALLING_CONV ceddl_getOut(model_ptr m) {
         return eddl::getOut(static_cast<eddl::model>(m))[0];
     }

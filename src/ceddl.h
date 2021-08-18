@@ -120,7 +120,7 @@ extern "C" {
     // Returns HTML to plot the layer
     CEDDLL_API std::string CALLING_CONV ceddl_layer_plot(int c, layer_ptr m);
 
-    // Get output layer
+    // Get first output layer
     CEDDLL_API layer_ptr CALLING_CONV ceddl_getOut(model_ptr m);
 
     // Core Layers
