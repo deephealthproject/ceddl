@@ -81,7 +81,6 @@ extern "C" {
     CEDDLL_API void CALLING_CONV ceddl_setlogfile(model_ptr m, const char* fname);
     CEDDLL_API void CALLING_CONV ceddl_summary(model_ptr m);
     CEDDLL_API void CALLING_CONV ceddl_plot(model_ptr m, const char* fname);
-    CEDDLL_API std::string CALLING_CONV ceddl_layer_plot(int c, layer_ptr m);
 
     // Serialization
     CEDDLL_API void CALLING_CONV ceddl_load(model_ptr m, const char* fname);
@@ -117,6 +116,9 @@ extern "C" {
     ///////////////////////////////////////
     //  LAYERS
     ///////////////////////////////////////
+
+    // Returns HTML to plot the layer
+    CEDDLL_API std::string CALLING_CONV ceddl_layer_plot(int c, layer_ptr m);
 
     // Get output layer
     CEDDLL_API layer_ptr CALLING_CONV ceddl_getOut(model_ptr m);

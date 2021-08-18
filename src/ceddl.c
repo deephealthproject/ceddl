@@ -226,10 +226,6 @@ extern "C" {
         eddl::plot(static_cast<eddl::model>(m), fname_str);
     }
 
-    CEDDLL_API std::string CALLING_CONV ceddl_layer_plot(int c, layer_ptr m) {
-        return static_cast<eddl::layer>(m) -> plot(c);
-    }
-
     // Serialization
     CEDDLL_API void CALLING_CONV ceddl_load(model_ptr m, const char* fname) {
         const std::string fname_str = string(fname);
@@ -326,6 +322,11 @@ extern "C" {
     ///////////////////////////////////////
     //  LAYERS
     ///////////////////////////////////////
+
+    // Returns HTML to plot the layer
+    CEDDLL_API std::string CALLING_CONV ceddl_layer_plot(int c, layer_ptr m) {
+        return static_cast<eddl::layer>(m) -> plot(c);
+    }
 
     // Get output
     CEDDLL_API layer_ptr CALLING_CONV ceddl_getOut(model_ptr m) {
