@@ -18,6 +18,7 @@
 #include <eddl/tensor/tensor.h>
 #include <eddl/metrics/metric.h>
 #include <eddl/optimizers/optim.h>
+#include <eddl/layers/layer.h>
 #include <eddl/layers/core/layer_core.h>
 #include <eddl/layers/conv/layer_conv.h>
 #include <eddl/layers/pool/layer_pool.h>
@@ -85,6 +86,14 @@ void fillVectorWithTypes(std::vector<T> &vector, const T_ptr* arr, int arr_count
 
 
 extern "C" {
+    // ----- Debug -----
+    // Print strings
+    CEDDLL_API void CALLING_CONV ceddl_debug_string(const char* string_to_debug) {  
+        std::stringstream ss;
+        ss << string_to_debug << std::endl;
+
+        cout << ss.str() << "\n";
+    }
 
     // ---- TENSOR ----
     CEDDLL_API tensor_ptr CALLING_CONV ceddl_tensor(const int* shape, int shape_count, float *data) {
@@ -314,10 +323,15 @@ extern "C" {
     //  LAYERS
     ///////////////////////////////////////
 
+    // Returns HTML to plot the layer
+    CEDDLL_API std::string CALLING_CONV ceddl_layer_plot(int c, layer_ptr m) {
+        return static_cast<eddl::layer>(m) -> plot(c);
+    }
+
+
     // Get first output layer
-    CEDDLL_API layer_ptr CALLING_CONV ceddl_GetOut(model_ptr net){
-        layer_ptr outlayer = eddl::getOut(static_cast<eddl::model>(net))[0];
-        return outlayer;
+    CEDDLL_API layer_ptr CALLING_CONV ceddl_getOut(model_ptr m) {
+        return eddl::getOut(static_cast<eddl::model>(m))[0];
     }
 
     // Core Layers

@@ -35,6 +35,9 @@ extern "C" {
     typedef void* metric_ptr;
     typedef void* compserv_ptr;
 
+    // Debug
+    CEDDLL_API void CALLING_CONV ceddl_debug_string(const char* string_to_debug);
+
     // ---- TENSOR ----
     CEDDLL_API tensor_ptr CALLING_CONV ceddl_tensor(const int* shape, int shape_count, float *data);
 
@@ -114,8 +117,11 @@ extern "C" {
     //  LAYERS
     ///////////////////////////////////////
 
-    // Output Layer
-    CEDDLL_API layer_ptr CALLING_CONV ceddl_GetOut(model_ptr net);
+    // Returns HTML to plot the layer
+    CEDDLL_API std::string CALLING_CONV ceddl_layer_plot(int c, layer_ptr m);
+
+    // Get first output layer
+    CEDDLL_API layer_ptr CALLING_CONV ceddl_getOut(model_ptr m);
 
     // Core Layers
     CEDDLL_API layer_ptr CALLING_CONV ceddl_Activation(
