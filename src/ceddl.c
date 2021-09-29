@@ -60,6 +60,8 @@ eddl::layer transformLayer(layer_ptr l, string type) {
         myLayer = static_cast<LBatchNorm *>(l);
     } else if (type == "UpSampling") {
         myLayer = static_cast<LUpSampling *>(l);
+    } else {
+        myLayer = static_cast<eddl::layer>(l);
     }
     return myLayer;
 }
