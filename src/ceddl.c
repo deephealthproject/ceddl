@@ -179,7 +179,7 @@ extern "C" {
         optimizer_ptr o, const char* type,
         const char** lo, int lo_count,
         const char** me, int me_count,
-        compserv_ptr cs
+        compserv_ptr cs, bool init_weights
     ) {
         const std::string type_str = string(type);
         std::vector<string> lo_vector = std::vector<string>();
@@ -203,7 +203,7 @@ extern "C" {
             // type_str == "RMSProp"
             myOptimizer = static_cast<RMSProp *>(o);
         }
-        eddl::build(static_cast<eddl::model>(net), myOptimizer, lo_vector, me_vector, static_cast<eddl::compserv>(cs));
+        eddl::build(static_cast<eddl::model>(net), myOptimizer, lo_vector, me_vector, static_cast<eddl::compserv>(cs), init_weights);
     }
 
     // Computing services
