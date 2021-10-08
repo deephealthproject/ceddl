@@ -71,7 +71,7 @@ extern "C" {
         optimizer_ptr o, const char* type,
         const char** lo, int lo_count,
         const char** me, int me_count,
-        compserv_ptr cs
+        compserv_ptr cs, bool init_weights=true
     );
     
     // Computing services
